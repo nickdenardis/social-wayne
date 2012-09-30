@@ -35,3 +35,16 @@ function Flash($message='', $type='success'){
 	
 	return $out;
 }
+
+function h($string, $display=false){
+	// Make the string Web safe
+	$out = htmlspecialchars(stripslashes($string));
+
+	// Return or echo
+	if ($display)
+		echo $out;
+	else
+		return $out;
+
+	return true;
+}
