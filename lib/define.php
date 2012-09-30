@@ -27,10 +27,15 @@ if (isset($_POST['accessid']) && isset($_POST['password'])){
 		$_SESSION['sessionid'] = $login_response['response']['auth']['sessionid'];
 		
 		// Get the users information
-		Pre($c->sendRequest('api/user/info', array('accessid' => $_POST['accessid'])));
-		
-		Flash('You are now logged in', 'success');
+		$user_details = $c->sendRequest('api/user/info', array('accessid' => $_POST['accessid']));
+
+		// Save the basic information about this user
+		$_SESSION['user_details'] = $user_details['response']['user'];
+
+		// Set the user message
+		Flash('Welcome back ' . $_SESSION['user_details']['first_name'] . '!', 'success');
 	}else{
+		// Set the user error message
 		Flash('Incorrect AccessID/password. Please try again', 'error');
 	}
 	
@@ -39,7 +44,16 @@ if (isset($_POST['accessid']) && isset($_POST['password'])){
 
 // if trying to logout
 if (isset($_GET['logout'])){
+	// Set the user message
+	Flash('See you next time ' . $_SESSION['user_details']['first_name'] . '!', 'success');
+
+	// Unset the session
 	unset($_SESSION['sessionid']);	
+	unset($_SESSION['user_details']);
+
+	// Redirect to homepage
+	header('Location:' . PATH);
+	die();
 }
 
 // Set the sessionID if in the session

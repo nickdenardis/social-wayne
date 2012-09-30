@@ -53,11 +53,17 @@
                             <li><a href="<?php echo PATH; ?>mentions/listing">Mentions</a></li>
                             <li><a href="<?php echo PATH; ?>stats/listing">Stats</a></li>
                         </ul>
+                        <?php if (!isset($_SESSION['sessionid'])){ ?>
                         <form class="navbar-form pull-right" method="post">
                             <input class="span2" type="text" placeholder="AccessID" name="accessid" value="<?php echo (isset($_POST['accessid'])?$_POST['accessid']:''); ?>">
                             <input class="span2" type="password" placeholder="Password" name="password">
                             <button type="submit" class="btn">Sign in</button>
                         </form>
+                        <?php }else{ ?>
+                            <ul class="nav pull-right">
+                                <li><a href="?logout">(<?php echo h($_SESSION['user_details']['accessid']); ?>) Logout</a></li>
+                            </ul>
+                        <?php } ?>
                     </div><!--/.nav-collapse -->
                 </div>
             </div>
