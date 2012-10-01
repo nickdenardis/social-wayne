@@ -1,16 +1,20 @@
 <?php
 session_start();
 
+// If there is a local define, use that
+if (is_file($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/define-local.php'))
+	include_once($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/define-local.php');
+
 // Defines
-define('PATH', '/social-wayne/');
+define('PATH', '/social/');
+define('API_KEY', 'yfzglacwsx'); //content.wayne.edu
 
 // Include the API
 include_once($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/phpcms/phpcms.php');
 include_once($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/functions.php');
 
 // Initialize the API
-//$c = new Phpcms('yfzglacwsx');
-$c = new Phpcms('ahombstqkr');
+$c = new Phpcms(API_KEY);
 $c->debug = false;
 //$c->parser = 'raw';
 
@@ -60,3 +64,6 @@ if (isset($_GET['logout'])){
 if (isset($_SESSION['sessionid'])){
 	$c->setSession($_SESSION['sessionid']);
 }
+
+// Setup defaults
+$page_title = 'Home';

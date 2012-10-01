@@ -538,3 +538,6 @@ php_flag display_errors On
 <IfModule php5_module>
   php_value session.cookie_httponly true
 </IfModule>
+
+# --------- Social Dashboard ----------- #
+RewriteRule ^([a-zA-Z-]+)/([a-zA-Z-]+)/?$ /social-wayne/$1-$2.php
