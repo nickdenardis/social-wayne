@@ -31,8 +31,4 @@
 
 <?php
 	include_once(ROOT. '/_footer.php');
-?>        
-
-
-            
-            
+?>

@@ -29,8 +29,6 @@ $c->debug = false;
 if (isset($_POST['accessid']) && isset($_POST['password'])){
 	$login_credentials = array('accessid' => strtolower($_POST['accessid']), 'password' => $_POST['password']);
 	$login_response = $c->sendRequest('api/user/auth', $login_credentials , 'post', true);
-	
-	Pre($login_response);
 
 	// Store the session ID in the session
 	if (isset($login_response['response']['auth']['sessionid'])){
