@@ -62,7 +62,32 @@
 	
 	include_once(ROOT . '/_header.php');
 ?>
-<div class="row-fluid">
+<div class="row-fluid" id="content">
+	<div class="span8">
+		<div class="list-view">
+			<div class="list-header well">
+				<form id="search" class="form-search" method="post" action="">
+				<input type="text" class="query input-large search-query " name="search" value="" placeholder="Search URL's" autocomplete="off" maxlength="50">
+				</form>
+			</div>
+			<form method="post" class="well">
+			<fieldset>
+				<div class="controls">
+				  <label>New URL:</label>
+				  <input type="text" placeholder="http://..."  class="input-xxlarge" name="url">
+				</div>
+				<div class="controls controls-row">
+				  <input class="span2" type="text" name="short_url" placeholder="short_url (auto)">
+				  <input class="span2" type="text" name="utm_source" placeholder="utm_source" value="twitter">
+				  <input class="span2" type="text" name="utm_medium" placeholder="utm_medium" value="go.wayne.edu">
+				  <input class="span2" type="text" name="utm_campaign" placeholder="utm_campaign" value="social">
+				</div>
+				<input type="submit" class="btn" name="submit" value="Create" />
+			</fieldset>
+			</form>
+		</div>
+	</div>
+<!-- 
 	<div class="sidebar-nav">
 		<div class="span3">
 			<ul class="nav nav-list"> 
@@ -78,25 +103,8 @@
 			</ul>
 		</div>
 	</div>
+-->
 	
-	<div class="span9">
-		<form method="post">
-		<fieldset>
-			<legend>New URL</legend>
-			<div class="controls">
-			  <label>URL</label>
-			  <input type="text" placeholder="http://..."  class="input-xxlarge" name="url">
-			</div>
-			<div class="controls controls-row">
-			  <input class="span2" type="text" name="short_url" placeholder="short_url (auto)">
-			  <input class="span2" type="text" name="utm_source" placeholder="utm_source" value="twitter">
-			  <input class="span2" type="text" name="utm_medium" placeholder="utm_medium" value="go.wayne.edu">
-			  <input class="span2" type="text" name="utm_campaign" placeholder="utm_campaign" value="social">
-			</div>
-			<input type="submit" class="btn" name="submit" value="Create" />
-		</fieldset>
-		</form>
-	</div>
 </div>
 
 <?php
