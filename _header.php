@@ -38,12 +38,11 @@
                     <a class="brand" href="<?php echo PATH; ?>">Social Dashboard</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li class="active"><a href="<?php echo PATH; ?>">Home</a></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">New Message <b class="caret"></b></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">New <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?php echo PATH; ?>message/twitter/new">Twitter</a></li>
-                                    <li><a href="<?php echo PATH; ?>message/facebook/new">Facebook</a></li>
+                                    <li><a href="<?php echo PATH; ?>message/twitter/new">Tweet</a></li>
+                                    <li><a href="<?php echo PATH; ?>message/facebook/new">FB Update</a></li>
                                     <li><a href="<?php echo PATH; ?>message/tumblr/new">Tumblr</a></li>
                                     <li><a href="<?php echo PATH; ?>url/new">URL</a></li>
                                 </ul>
