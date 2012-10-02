@@ -140,6 +140,16 @@ class Phpcms {
 			}
 		}
 		
+		// Debug?
+		if ($this->debug) {
+			echo '<pre>';
+			print_r($reqURL);
+			print_r($http_header);
+			print_r($this->buildArguments($args));
+			echo '</pre>';
+		}	
+		
+		
 		$response = curl_exec($curl_handle);
 		
 		if (!$response)

@@ -19,7 +19,7 @@
 			
 			 // If the page is returned successfully
 	        if ($page['info']['http_code'] == '200'){
-				$page_title = 'Page: ' . $page['info']['url'];
+				$title = 'Page: ' . $page['info']['url'];
 			
 				// Include the DOM functions
 				include_once(ROOT . '/lib/dom/simple_html_dom.php');
@@ -27,13 +27,13 @@
 				// Grab the page title
 				$html = str_get_html($page['response']);
 				if (is_object($html)){
-					$page_title = trim($html->find('title', 0)->plaintext);
+					$title = trim($html->find('title', 0)->plaintext);
 				}
 			}
 			
 			// Setup the URL Params
 			$url_params['url'] = $page['info']['url'];
-			$url_params['title'] = $page_title;
+			$url_params['title'] = $title;
 			
 			$url_valid = true;
 		}
@@ -45,9 +45,15 @@
 			$url_params['utm_campaign'] = 'social';
 			$url_params['utm_content'] = '';
 			
+			// Actually create the URL
 			$url_response = $c->sendRequest('go/url/create', $url_params , 'post', true);
 			
-			Pre($url_response);
+			// If returned successfully 
+			if (isset($url_response['response']['url'])){
+				Flash('URL Created: <a href="http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '" target="_blank">http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '</a>', 'success');
+			}else{
+				Flash('Something went wrong in the API. Please check with a systems administrator.', 'error');
+			}
 		}else{
 			Flash('The URL you entered is not valid, please try again', 'error');
 		}
