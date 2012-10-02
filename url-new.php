@@ -52,12 +52,15 @@
 			if (isset($url_response['response']['url'])){
 				Flash('URL Created: <a href="http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '" target="_blank">http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '</a>', 'success');
 			}else{
+				Pre($url_response);
 				Flash('Something went wrong in the API. Please check with a systems administrator.', 'error');
 			}
 		}else{
 			Flash('The URL you entered is not valid, please try again', 'error');
 		}
 	}
+	
+	// Get the list of social URL's
 	
 	include_once(ROOT . '/_header.php');
 ?>
@@ -86,16 +89,6 @@
 		</div>
 		  <input type="submit" class="btn" name="submit" value="Create" />
 		</form>
-		<!-- 
-		utm_source
-		utm_medium
-		utm_campaign
-		utm_content
-		utm_term
-		url
-		title
-		short_url
-		-->
 	</div>
 </div>
 

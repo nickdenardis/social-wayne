@@ -11,14 +11,15 @@ if (is_file(ROOT . '/lib/define-local.php'))
 
 // Defines
 d('PATH', '/social/');
-d('API_KEY', 'yfzglacwsx'); //content.wayne.edu
+d('API_KEY', 'yfzglacwsx'); // content.wayne.edu
+d('MODE', 'production'); // Use the production API
 
 // Include the API
 include_once(ROOT . '/lib/phpcms/phpcms.php');
 include_once(ROOT . '/lib/functions.php');
 
 // Initialize the API
-$c = new Phpcms(API_KEY);
+$c = new Phpcms(API_KEY, MODE);
 $c->debug = false;
 //$c->parser = 'raw';
 
