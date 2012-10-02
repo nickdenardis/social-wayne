@@ -5,3 +5,4 @@ app/config/database.php
 !empty
 info.php
 lib/define-local.php
+cookies.txt
