@@ -1,9 +1,10 @@
-<?php 
-	include_once($_SERVER['DOCUMENT_ROOT'] . '/social/lib/define.php');
+<?php
+	define('ROOT', dirname(__FILE__));
+	include_once(ROOT . '/lib/define.php');
 	
 	$page_title = 'New URL';
 	
-	include_once($_SERVER['DOCUMENT_ROOT'] . PATH . '_header.php');
+	include_once(ROOT . '/_header.php');
 ?>
 <div class="row-fluid">
 	<div class="sidebar-nav">
@@ -29,7 +30,7 @@
 </div>
 
 <?php
-	include_once($_SERVER['DOCUMENT_ROOT'] . PATH . '_footer.php');
+	include_once(ROOT. '/_footer.php');
 ?>        
 
 

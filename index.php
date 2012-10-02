@@ -1,6 +1,7 @@
 <?php
-	include_once($_SERVER['DOCUMENT_ROOT'] . '/social/lib/define.php');
-	include_once($_SERVER['DOCUMENT_ROOT'] . PATH . '_header.php');	
+	define('ROOT', dirname(__FILE__));
+	include_once(ROOT . '/lib/define.php');
+	include_once(ROOT . '/_header.php');	
 ?>
 
             <!-- Main hero unit for a primary marketing message or call to action -->
@@ -30,5 +31,5 @@
             </div>
             
 <?php
-	include_once($_SERVER['DOCUMENT_ROOT'] . PATH . '_footer.php');	
+	include_once(ROOT . '/_footer.php');	
 ?>

@@ -1,17 +1,21 @@
 <?php
 session_start();
 
+function d($const, $value){
+	return defined(strtoupper($const)) or define(strtoupper($const), $value);
+}
+
 // If there is a local define, use that
-if (is_file($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/define-local.php'))
-	include_once($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/define-local.php');
+if (is_file(ROOT . '/lib/define-local.php'))
+	include_once(ROOT . '/lib/define-local.php');
 
 // Defines
-define('PATH', '/social/');
-define('API_KEY', 'yfzglacwsx'); //content.wayne.edu
+d('PATH', '/social/');
+d('API_KEY', 'yfzglacwsx'); //content.wayne.edu
 
 // Include the API
-include_once($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/phpcms/phpcms.php');
-include_once($_SERVER['DOCUMENT_ROOT'] . PATH . 'lib/functions.php');
+include_once(ROOT . '/lib/phpcms/phpcms.php');
+include_once(ROOT . '/lib/functions.php');
 
 // Initialize the API
 $c = new Phpcms(API_KEY);
@@ -25,6 +29,8 @@ $c->debug = false;
 if (isset($_POST['accessid']) && isset($_POST['password'])){
 	$login_credentials = array('accessid' => strtolower($_POST['accessid']), 'password' => $_POST['password']);
 	$login_response = $c->sendRequest('api/user/auth', $login_credentials , 'post', true);
+	
+	Pre($login_response);
 
 	// Store the session ID in the session
 	if (isset($login_response['response']['auth']['sessionid'])){
