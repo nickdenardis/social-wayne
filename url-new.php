@@ -9,6 +9,8 @@
 		// Make sure this is a valid URL
 		$url_valid = false;
 		
+		$url_params = $_POST;
+		
 		if (substr(trim($_POST['url']), 0, 4) == 'http'){
 			// Use CURL
 			include_once(ROOT . '/lib/curl/curl.php');
@@ -39,11 +41,7 @@
 		}
 		
 		if ($url_valid){
-			// Setup the social vars
-			$url_params['utm_source'] = 'twitter';
-			$url_params['utm_medium'] = 'go.wayne.edu';
-			$url_params['utm_campaign'] = 'social';
-			$url_params['utm_content'] = '';
+			//Pre($url_params);
 			
 			// Actually create the URL
 			$url_response = $c->sendRequest('go/url/create', $url_params , 'post', true);
@@ -52,7 +50,6 @@
 			if (isset($url_response['response']['url'])){
 				Flash('URL Created: <a href="http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '" target="_blank">http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '</a>', 'success');
 			}else{
-				Pre($url_response);
 				Flash('Something went wrong in the API. Please check with a systems administrator.', 'error');
 			}
 		}else{
@@ -66,7 +63,7 @@
 ?>
 <div class="row-fluid">
 	<div class="sidebar-nav">
-		<div class="well span3">
+		<div class="span3">
 			<ul class="nav nav-list"> 
 			  <li class="nav-header">Admin Menu</li>        
 			  <li><a href="<?php echo PATH; ?>"><i class="icon-home"></i> Dashboard</a></li>
@@ -80,12 +77,18 @@
 		</div>
 	</div>
 	
-	<div class="span6">
+	<div class="span9">
 		<h1>Add New URL</h1>
 		<form method="post">
 		<div class="controls">
 		  <label>URL</label>
 		  <input type="text" placeholder="http://..."  class="input-xxlarge" name="url">
+		</div>
+		<div class="controls controls-row">
+		  <input class="span2" type="text" name="short_url" placeholder="short_url (auto)">
+		  <input class="span2" type="text" name="utm_source" placeholder="utm_source" value="twitter">
+		  <input class="span2" type="text" name="utm_medium" placeholder="utm_medium" value="go.wayne.edu">
+		  <input class="span2" type="text" name="utm_campaign" placeholder="utm_campaign" value="social">
 		</div>
 		  <input type="submit" class="btn" name="submit" value="Create" />
 		</form>

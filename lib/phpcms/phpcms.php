@@ -37,7 +37,7 @@ class Phpcms {
 		if ($mode == 'dev'){
 			// Use the local server paths for now
 			$this->cmsREST = 'http://www-dev.api.wayne.edu/v1/'; 
-			$this->cmsRESTSSL = 'http://www-dev.api.wayne.edu/v1/';
+			$this->cmsRESTSSL = 'https://www-dev.api.wayne.edu/v1/';
 		}
 		
 		// Check to see if we are on the same server as the API classes
