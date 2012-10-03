@@ -35,7 +35,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="<?php echo PATH; ?>">Social Dashboard</a>
+                    <a class="brand" href="<?php echo PATH; ?>">Socialy</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                             <li class="dropdown">
