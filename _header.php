@@ -50,6 +50,7 @@
                             
                             <li><a href="<?php echo PATH; ?>mentions/listing">Mentions</a></li>
                             <li><a href="<?php echo PATH; ?>stats/listing">Stats</a></li>
+                            <li><a href="<?php echo PATH; ?>accounts/listing">Access</a></li>
                         </ul>
                         <?php if (!isset($_SESSION['sessionid'])){ ?>
                         <form class="navbar-form pull-right" method="post">

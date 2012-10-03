@@ -87,23 +87,6 @@
 			</form>
 		</div>
 	</div>
-<!-- 
-	<div class="sidebar-nav">
-		<div class="span3">
-			<ul class="nav nav-list"> 
-			  <li class="nav-header">Social</li>        
-			  <li class="active"><a href="<?php echo PATH; ?>"><i class="icon-home"></i> Home</a></li>
-	          <li><a href="#"><i class="icon-envelope"></i> Messages <span class="badge badge-info">4</span></a></li>
-	          <li><a href="#"><i class="icon-comment"></i> Comments <span class="badge badge-info">10</span></a></li>
-			  <li><a href="#"><i class="icon-user"></i> Members</a></li>
-	          <li class="divider"></li>
-			  <li><a href="<?php echo PATH; ?>url/new"><i class="icon-share"></i> New URL</a></li>
-			  <li><a href="#"><i class="icon-fire"></i> Stats</a></li>
-			  <li><a href="?logout"><i class="icon-share"></i> Logout</a></li>
-			</ul>
-		</div>
-	</div>
--->
 	
 </div>
 
