@@ -19,11 +19,10 @@
 			
 			// Grab the homepage to get all the info about it
 			$page = $myCurl->get(trim($_POST['url']), NULL, true);
+			$title = 'Page: ' . $page['info']['url'];
 			
 			 // If the page is returned successfully
 	        if ($page['info']['http_code'] == '200'){
-				$title = 'Page: ' . $page['info']['url'];
-			
 				// Include the DOM functions
 				include_once(ROOT . '/lib/dom/simple_html_dom.php');
 				
@@ -46,6 +45,8 @@
 			
 			// Actually create the URL
 			$url_response = $c->sendRequest('go/url/create', $url_params , 'post', true);
+			
+			Pre($url_response);
 			
 			// If returned successfully 
 			if (isset($url_response['response']['url'])){

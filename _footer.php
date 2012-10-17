@@ -1,6 +1,6 @@
 <hr>
             <footer>
-                <p>&copy; Wayne State University 2012</p>
+                <p>&copy; Wayne State University 2012 <?php echo (MODE == 'production')?'<span class="label label-success">Production API</span>':'<span class="label label-important">Dev API</span>'; ?> </p>
             </footer>
 
         </div> <!-- /container -->

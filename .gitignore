@@ -6,3 +6,4 @@ app/config/database.php
 info.php
 lib/define-local.php
 cookies.txt
+lib/.DS_Store
