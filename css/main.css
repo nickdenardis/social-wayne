@@ -23,3 +23,22 @@ body {
 footer {
 	color: #FFF;
 }
+
+
+/* Homepage */
+.hero-social .span4 {
+	background-color: #eee;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;	
+}
+.hero-social .span4 h2 {
+	margin: 0;
+	font-size: 1.2em;
+	background-color: #888;
+	padding: 0 10px;
+	color: #eee;
+}
+.hero-social .span4 p {
+	padding: 5px;
+}

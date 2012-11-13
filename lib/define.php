@@ -10,8 +10,8 @@ if (is_file(ROOT . '/lib/define-local.php'))
 	include_once(ROOT . '/lib/define-local.php');
 
 // Defines
-d('PATH', '/social/');
-d('API_KEY', 'yfzglacwsx'); // content.wayne.edu
+d('PATH', '/' . array_pop(explode('/', ROOT)) . '/');
+d('API_KEY', 'vnjjhwwtrp'); // i.wayne.edu
 d('MODE', 'production'); // Use the production API
 
 // Include the API

@@ -108,6 +108,8 @@
 	
 	  if ($code == 200) {
 	    $resp = json_decode($tmhOAuth->response['response']);
+	    print_r($resp);
+	    print_r($_SESSION);
 	    echo '<h1>Hello ' . $resp->screen_name . '</h1>';
 	    echo '<p>The access level of this token is: ' . $tmhOAuth->response['headers']['x_access_level'] . '</p>';
 	  } else {
@@ -140,7 +142,7 @@
 				  Do you want to <a href="?verify=1">verify the credentials?</a> or
 				  <a href="?wipe=1">wipe them and start again</a>.
 				<?php else : ?>
-				  <a href="?start=1">Authorize with OAuth</a>.
+				  <a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a>.
 				<?php endif; ?>
 				</p>
 			</div>
