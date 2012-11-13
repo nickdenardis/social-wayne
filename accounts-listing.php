@@ -5,28 +5,6 @@
 	$page_title = 'Accounts';
 	$page_url = $_SERVER['PHP_SELF'];
 	
-	/**
-	 * Demonstration of the OAuth authorize flow only. You would typically do this
-	 * when an unknown user is first using your application and you wish to make
-	 * requests on their behalf.
-	 *
-	 * Instead of storing the token and secret in the session you would probably
-	 * store them in a secure database with their logon details for your website.
-	 *
-	 * When the user next visits the site, or you wish to act on their behalf,
-	 * you would use those tokens and skip this entire process.
-	 *
-	 * Instructions:
-	 * 1) If you don't have one already, create a Twitter application on
-	 *      https://dev.twitter.com/apps
-	 * 2) From the application details page copy the consumer key and consumer
-	 *      secret into the place in this code marked with (YOUR_CONSUMER_KEY
-	 *      and YOUR_CONSUMER_SECRET)
-	 * 3) Visit this page using your web browser.
-	 *
-	 * @author themattharris
-	 */
-	
 	include_once(ROOT . '/lib/themattharris/tmhOAuth.php');
 	include_once(ROOT . '/lib/themattharris/tmhUtilities.php');
 	$tmhOAuth = new tmhOAuth(array(
@@ -142,7 +120,7 @@
 				  Do you want to <a href="?verify=1">verify the credentials?</a> or
 				  <a href="?wipe=1">wipe them and start again</a>.
 				<?php else : ?>
-				  <a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a>.
+				  <a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a>
 				<?php endif; ?>
 				</p>
 			</div>
@@ -150,6 +128,12 @@
 		</div>
 	</div>
 	
+	<div class="span4">
+		<div class="list-view">
+			<h2>Add an Account</h2>
+			<a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a>
+		</div>
+	</div>
 </div>
 
 <?php
