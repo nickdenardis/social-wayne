@@ -11,8 +11,20 @@ if (is_file(ROOT . '/lib/define-local.php'))
 
 // Defines
 d('PATH', '/' . array_pop(explode('/', ROOT)) . '/');
-d('API_KEY', 'vnjjhwwtrp'); // i.wayne.edu
-d('MODE', 'production'); // Use the production API
+
+// Find the default mode
+if (!isset($_SESSION['api_mode']))
+	$_SESSION['api_mode'] = (strstr($_SERVER['HOST'], 'www-dev') !== false)?'dev':'production';
+
+// Flop the API if needed
+if (isset($_GET['api']) && $_GET['api'] == 'flop'){
+	$_SESSION['api_mode'] = ($_SESSION['api_mode'] == 'dev')?'production':'dev';
+	header('location:' . PATH);
+	die();
+}
+
+d('MODE', $_SESSION['api_mode']); // Use the right API
+d('API_KEY', ($_SESSION['api_mode'] == 'dev')?'bcppxparnj':'vnjjhwwtrp'); // i.wayne.edu
 
 // Include the API
 include_once(ROOT . '/lib/phpcms/phpcms.php');

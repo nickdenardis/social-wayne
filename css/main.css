@@ -23,6 +23,9 @@ body {
 footer {
 	color: #FFF;
 }
+.label a {
+	color: #fff;
+}
 
 
 /* Homepage */

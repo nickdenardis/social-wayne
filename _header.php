@@ -37,6 +37,7 @@
                     </a>
                     <a class="brand" href="<?php echo PATH; ?>">Socialy</a>
                     <div class="nav-collapse collapse">
+                    	<?php if (isset($_SESSION['sessionid'])){ ?>
                         <ul class="nav">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">New <b class="caret"></b></a>
@@ -48,10 +49,12 @@
                                 </ul>
                             </li>
                             
+                            <li><a href="<?php echo PATH; ?>schedule/listing">Schedule</a></li>
                             <li><a href="<?php echo PATH; ?>mentions/listing">Mentions</a></li>
                             <li><a href="<?php echo PATH; ?>stats/listing">Stats</a></li>
                             <li><a href="<?php echo PATH; ?>accounts/listing">Access</a></li>
                         </ul>
+                        <?php } ?>
                         <?php if (!isset($_SESSION['sessionid'])){ ?>
                         <form class="navbar-form pull-right" method="post">
                             <input class="span2" type="text" placeholder="AccessID" name="accessid" value="<?php echo (isset($_POST['accessid'])?$_POST['accessid']:''); ?>">
