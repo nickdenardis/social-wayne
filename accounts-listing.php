@@ -76,6 +76,8 @@
 	    $socialy_params['type'] = 'twitter';
 	    $socialy_params['is_active'] = '1';
 	    $social_response = $c->sendRequest('socialy/account/add', $socialy_params, 'post', true);
+	    
+	    Pre($social_response);
 
 	    header('Location: ' . tmhUtilities::php_self());
 	  } else {

@@ -46,8 +46,6 @@
 			// Actually create the URL
 			$url_response = $c->sendRequest('go/url/create', $url_params , 'post', true);
 			
-			Pre($url_response);
-			
 			// If returned successfully 
 			if (isset($url_response['response']['url'])){
 				Flash('URL Created: <a href="http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '" target="_blank">http://go.wayne.edu/' . $url_response['response']['url']['short_url'] . '</a>', 'success');
