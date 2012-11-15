@@ -53,6 +53,8 @@
 	
 	// Step 3: This is the code that runs when Twitter redirects the user to the callback. Exchange the temporary token for a permanent access token
 	function access_token($tmhOAuth) {
+	  global $c;
+	  
 	  $tmhOAuth->config['user_token']  = $_SESSION['oauth']['oauth_token'];
 	  $tmhOAuth->config['user_secret'] = $_SESSION['oauth']['oauth_token_secret'];
 	
@@ -67,6 +69,14 @@
 	  if ($code == 200) {
 	    $_SESSION['access_token'] = $tmhOAuth->extract_params($tmhOAuth->response['response']);
 	    unset($_SESSION['oauth']);
+	    
+	    // Save the credentials in the DB
+	    $socialy_params = $_SESSION['access_token'];
+	    $socialy_params['owner_id'] = $_SESSION['user_details']['user_id'];
+	    $socialy_params['type'] = 'twitter';
+	    $socialy_params['is_active'] = '1';
+	    $social_response = $c->sendRequest('socialy/account/add', $socialy_params, 'post', true);
+
 	    header('Location: ' . tmhUtilities::php_self());
 	  } else {
 	    outputError($tmhOAuth);

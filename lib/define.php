@@ -14,12 +14,12 @@ d('PATH', '/' . array_pop(explode('/', ROOT)) . '/');
 
 // Find the default mode
 if (!isset($_SESSION['api_mode']))
-	$_SESSION['api_mode'] = (strstr($_SERVER['HOST'], 'www-dev') !== false)?'dev':'production';
+	$_SESSION['api_mode'] = (strstr($_SERVER['HTTP_HOST'], 'www-dev') === false)?'production':'dev';
 
 // Flop the API if needed
 if (isset($_GET['api']) && $_GET['api'] == 'flop'){
 	$_SESSION['api_mode'] = ($_SESSION['api_mode'] == 'dev')?'production':'dev';
-	header('location:' . PATH);
+	header('location:' . $_SERVER['HTTP_REFERER']);
 	die();
 }
 
