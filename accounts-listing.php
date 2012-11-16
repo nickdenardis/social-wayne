@@ -2,14 +2,32 @@
 	define('ROOT', dirname(__FILE__));
 	include_once(ROOT . '/lib/define.php');
 	
+	// oAuth stuff
+	include_once(ROOT . '/lib/themattharris/tmhOAuth.php');
+	include_once(ROOT . '/lib/themattharris/tmhUtilities.php');
+	
+	// Page stuff
 	$page_title = 'Accounts';
 	$page_url = $_SERVER['PHP_SELF'];
+	
+	// if removing access
+	if (isset($_GET['remove'])){
+		$remove_params = array('account_id' => (int)$_GET['remove']);
+		$account_removed = $c->sendRequest('socialy/account/remove', $remove_params, 'post');
+		
+		if (is_array($account_removed['response']['error']))
+	    	Flash($account_removed['response']['error']['message'], 'error');
+		else
+			Flash('The account has been removed.');
+			
+		header('Location: ' . tmhUtilities::php_self());
+		die();
+	}
 	
 	// Get a list of all the account this user has access to
 	$account_list = $c->sendRequest('socialy/account/listing', array(), 'get');
 	
-	include_once(ROOT . '/lib/themattharris/tmhOAuth.php');
-	include_once(ROOT . '/lib/themattharris/tmhUtilities.php');
+	
 	$tmhOAuth = new tmhOAuth(array(
 	  'consumer_key'    => 'AHbD6KOwFcUp57JJ8ofTw',
 	  'consumer_secret' => 'lxwPpSvedHIEQpevtPChGPuZk4awsVWECx5wUwE3R4',
@@ -81,9 +99,10 @@
 	    $social_response = $c->sendRequest('socialy/account/add', $socialy_params, 'post', true);
 	    
 	    if (is_array($social_response['response']['error']))
-	    	Flash('Something went wrong adding the account. Please check with a systems administrator.', 'error');
+	    	Flash($social_response['response']['error']['message'], 'error');
 
 	    header('Location: ' . tmhUtilities::php_self());
+	    die();
 	  } else {
 	    outputError($tmhOAuth);
 	  }
