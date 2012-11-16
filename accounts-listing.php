@@ -5,6 +5,9 @@
 	$page_title = 'Accounts';
 	$page_url = $_SERVER['PHP_SELF'];
 	
+	// Get a list of all the account this user has access to
+	$account_list = $c->sendRequest('socialy/account/listing', array(), 'get');
+	
 	include_once(ROOT . '/lib/themattharris/tmhOAuth.php');
 	include_once(ROOT . '/lib/themattharris/tmhUtilities.php');
 	$tmhOAuth = new tmhOAuth(array(
@@ -77,7 +80,8 @@
 	    $socialy_params['is_active'] = '1';
 	    $social_response = $c->sendRequest('socialy/account/add', $socialy_params, 'post', true);
 	    
-	    Pre($social_response);
+	    if (is_array($social_response['response']['error']))
+	    	Flash('Something went wrong adding the account. Please check with a systems administrator.', 'error');
 
 	    header('Location: ' . tmhUtilities::php_self());
 	  } else {
@@ -137,13 +141,28 @@
 				</p>
 			</div>
 			
+			<?php
+				// List the users accounts
+				if (is_array($account_list['response']['accounts'])){
+					echo '<ul>';
+					foreach($account_list['response']['accounts'] as $account){
+						echo '<li>' . h($account['screen_name']) . ' <span class="label"><a href="?remove=' . $account['account_id'] . '">Remove</a></span></li>';
+						
+					}
+					echo '</ul>';
+				}else{ ?>
+					<p>Please add an account on the right side.</p>	
+			<?php }
+			?>
 		</div>
 	</div>
 	
 	<div class="span4">
 		<div class="list-view">
 			<h2>Add an Account</h2>
-			<a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a>
+			<ul>
+				<li><a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a></li>
+			</ul>
 		</div>
 	</div>
 </div>
