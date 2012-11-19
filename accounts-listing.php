@@ -10,7 +10,7 @@
 	$page_title = 'Accounts';
 	$page_url = $_SERVER['PHP_SELF'];
 	
-	if (isset($_POST) && count($_POST) > 0){
+	if (isset($_POST['add_access']) && count($_POST['add_access']) > 0){
 		Pre($_POST);
 	}
 	
