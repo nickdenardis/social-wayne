@@ -34,7 +34,7 @@
 	));
 	
 	function outputError($tmhOAuth) {
-	  echo 'There was an error: ' . $tmhOAuth->response['response'] . PHP_EOL;
+	  Flash('There was an error: ' . $tmhOAuth->response['response']);
 	}
 	
 	function wipe() {
@@ -98,9 +98,35 @@
 	    $socialy_params['is_active'] = '1';
 	    $social_response = $c->sendRequest('socialy/account/add', $socialy_params, 'post', true);
 	    
+	    // If there was an error saving the account to the API
 	    if (is_array($social_response['response']['error']))
 	    	Flash($social_response['response']['error']['message'], 'error');
-
+	    	
+	    // Try to get the info for the account
+	    $tmhOAuth->config['user_token']  = $social_response['response']['account']['oauth_token'];
+	    $tmhOAuth->config['user_secret'] = $social_response['response']['account']['oauth_token_secret'];
+	    $code = $tmhOAuth->request('GET',$tmhOAuth->url('1/account/verify_credentials'));
+	
+	    // If this user is valid
+	    if ($code == 200) {
+	    	// Get the response
+		    $resp = json_decode($tmhOAuth->response['response'], true);
+		    
+		    // Update it in the twitter account table
+		    $account_params = $resp;
+		    $account_params['account_id'] = $social_response['response']['account']['account_id'];
+		    $account_params['owner_id'] = $_SESSION['user_details']['user_id'];
+		    unset($account_params['status']);
+		    
+		    $account_response = $c->sendRequest('socialy/twitterinfo/add', $account_params, 'post', true);
+		    
+		    // If there was an error saving the account to the API
+		    if (is_array($account_response['response']['error']))
+	    		Flash($account_response['response']['error']['message'], 'error');
+	    	else	
+		    	Flash('Account "' . $account_response['response']['twitter']['screen_name'] . '" added successfully!');
+	    }
+	    
 	    header('Location: ' . tmhUtilities::php_self());
 	    die();
 	  } else {
