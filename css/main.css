@@ -45,3 +45,43 @@ footer {
 .hero-social .span4 p {
 	padding: 5px;
 }
+
+/* Access List */
+#content .add-account h2 {
+	font-size: 1.5em;
+	margin: 0;
+	padding: 0 0 9px;
+}
+#content .add-account ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;	
+}
+#content .add-account li {
+	padding: 10px;
+}
+
+#content .account-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+#content .account-list li {
+	padding: 16px 10px;
+	padding-left: 66px;
+	border-bottom: 1px solid #eee;
+}
+#content .account-list img {
+	margin-left: -56px;
+	float: left;
+}
+#content .account-list .add-access {
+	float: right;
+	padding: 10px;
+}
+#content .account-list h2 {
+	margin: 0;
+	padding: 0;
+	font-size: 1.3em;
+	line-height: 1.4em;
+}

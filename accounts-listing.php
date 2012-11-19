@@ -10,6 +10,10 @@
 	$page_title = 'Accounts';
 	$page_url = $_SERVER['PHP_SELF'];
 	
+	if (isset($_POST) && count($_POST) > 0){
+		Pre($_POST);
+	}
+	
 	// if removing access
 	if (isset($_GET['remove'])){
 		$remove_params = array('account_id' => (int)$_GET['remove']);
@@ -23,10 +27,6 @@
 		header('Location: ' . tmhUtilities::php_self());
 		die();
 	}
-	
-	// Get a list of all the account this user has access to
-	$account_list = $c->sendRequest('socialy/account/listing', array(), 'get');
-	
 	
 	$tmhOAuth = new tmhOAuth(array(
 	  'consumer_key'    => 'AHbD6KOwFcUp57JJ8ofTw',
@@ -166,35 +166,36 @@
 	  wipe();
 	endif;
 	
+	// Get a list of all the account this user has access to
+	$account_list = $c->sendRequest('socialy/account/listing', array(), 'get');
+	
 	include_once(ROOT . '/_header.php');
 ?>	
 <div class="row-fluid" id="content">
-	<div class="span8">
+	<div class="span9">
 		<div class="list-view">
 			<div class="list-header well">
 				<form id="search" class="form-search" method="post" action="">
 					<input type="text" class="query input-large search-query " name="search" value="" placeholder="Search Accounts" autocomplete="off" maxlength="50">
 				</form>
-				<p>
-				<?php if (isset($_SESSION['access_token'])) : ?>
-				  There appears to be some credentials already stored in this browser session.
-				  Do you want to <a href="?verify=1">verify the credentials?</a> or
-				  <a href="?wipe=1">wipe them and start again</a>.
-				<?php else : ?>
-				  <a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a>
-				<?php endif; ?>
-				</p>
 			</div>
 			
 			<?php
 				// List the users accounts
 				if (is_array($account_list['response']['accounts'])){
-					echo '<ul>';
+					echo '<form id="account-access" class="form-account-access form-inline" method="post" action="">';
+					echo '<ul class="account-list">';
 					foreach($account_list['response']['accounts'] as $account){
-						echo '<li>' . h($account['screen_name']) . ' <span class="label"><a href="?remove=' . $account['account_id'] . '">Remove</a></span></li>';
+						echo '<li>';
+						echo '<img src="' . h($account['profile_image_url_https']) . '" width="48" height="48" alt="' . h($account['screen_name']) . '" />';
+						echo '<div class="controls controls-row add-access"><input type="text" class="input-small" name="add_access[' . h($account['account_id']) . ']" value="" placeholder="AccessID" autocomplete="off" maxlength="24"> <button type="submit" class="btn">Add Access</button></div>';
+						echo '<h2>' . h($account['name']) . ' (<a href="http://twitter.com/' . h($account['screen_name']) . '">@' . h($account['screen_name']) . '</a>) <span class="label remove"><a href="?remove=' . $account['account_id'] . '">Remove</a></span></h2>';
+						echo '<span class="stats">' . h($account['statuses_count']) . ' Tweets | ' . h($account['friends_count']) . ' Following | ' . h($account['followers_count']) . ' Followers</span>';
+						echo '</li>';
 						
 					}
 					echo '</ul>';
+					echo '</form>';
 				}else{ ?>
 					<p>Please add an account on the right side.</p>	
 			<?php }
@@ -202,9 +203,11 @@
 		</div>
 	</div>
 	
-	<div class="span4">
+	<div class="span3 add-account">
 		<div class="list-view">
-			<h2>Add an Account</h2>
+			<div class="list-header well">
+				<h2>Add an Account</h2>
+			</div>
 			<ul>
 				<li><a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a></li>
 			</ul>
