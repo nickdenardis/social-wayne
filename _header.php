@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title><?php echo h($page_title); ?> - Social Dashboard - Wayne State University</title>
+        <title><?php echo h($page_title); ?> - Socialy - Wayne State University</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
