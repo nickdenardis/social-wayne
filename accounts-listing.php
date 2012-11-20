@@ -208,6 +208,15 @@
 						echo '<div class="controls controls-row add-access"><input type="text" class="input-small" name="add_access[' . h($account['account_id']) . ']" value="" placeholder="AccessID" autocomplete="off" maxlength="24"> <button type="submit" class="btn">Add Access</button></div>';
 						echo '<h2>' . h($account['name']) . ' (<a href="http://twitter.com/' . h($account['screen_name']) . '">@' . h($account['screen_name']) . '</a>) <span class="label remove"><a href="?remove=' . $account['account_id'] . '">Remove</a></span></h2>';
 						echo '<span class="stats">' . h($account['statuses_count']) . ' Tweets | ' . h($account['friends_count']) . ' Following | ' . h($account['followers_count']) . ' Followers</span>';
+						
+						if (is_array($account['access']) && count($account['access']) > 1){
+							echo '<ul class="access-list">';
+							foreach($account['access'] as $user){
+								if ($user['user_id'] != $_SESSION['user_details']['user_id'])
+									echo '<li>' . $user['first_name'] . ' ' . $user['last_name'] . ' (' . $user['accessid'] . ') - ' . $user['level'] . '</li>';
+							}
+							echo '</ul>';
+						}
 						echo '</li>';
 						
 					}
