@@ -17,7 +17,7 @@
 			// If there was a user submitted
 			if ($accessid != ''){
 				// Create the params to submit
-				$access_params = array('account_id' => $account_id, 'accessid' => $accessid, 'level' => 'view');
+				$access_params = array('account_id' => $account_id, 'accessid' => $accessid, 'level' => $_POST['add_level'][$account_id]);
 	
 				// Do the API request to add their access
 				$access_response = $c->sendRequest('socialy/access/add', $access_params, 'post', true);
@@ -40,6 +40,20 @@
 	    	Flash($account_removed['response']['error']['message'], 'error');
 		else
 			Flash('The account has been removed.');
+			
+		header('Location: ' . tmhUtilities::php_self());
+		die();
+	}
+	
+	// if removing access
+	if (isset($_GET['remove_access']) && isset($_GET['user_id'])){
+		$remove_params = array('account_id' => (int)$_GET['remove_access'], 'user_id' => (int)$_GET['user_id']);
+		$access_removed = $c->sendRequest('socialy/access/remove', $remove_params, 'post');
+		
+		if (is_array($access_removed['response']['error']))
+	    	Flash($access_removed['response']['error']['message'], 'error');
+		else
+			Flash('The access has been removed.');
 			
 		header('Location: ' . tmhUtilities::php_self());
 		die();
@@ -186,6 +200,11 @@
 	// Get a list of all the account this user has access to
 	$account_list = $c->sendRequest('socialy/account/listing', array(), 'get');
 	
+	
+	$access_list = $c->sendRequest('socialy/account/access', array('notowner' => 'true'), 'get');
+	
+	//Pre($access_list);
+	
 	include_once(ROOT . '/_header.php');
 ?>	
 <div class="row-fluid" id="content">
@@ -205,15 +224,18 @@
 					foreach($account_list['response']['accounts'] as $account){
 						echo '<li>';
 						echo '<img src="' . h($account['profile_image_url_https']) . '" width="48" height="48" alt="' . h($account['screen_name']) . '" />';
-						echo '<div class="controls controls-row add-access"><input type="text" class="input-small" name="add_access[' . h($account['account_id']) . ']" value="" placeholder="AccessID" autocomplete="off" maxlength="24"> <button type="submit" class="btn">Add Access</button></div>';
-						echo '<h2>' . h($account['name']) . ' (<a href="http://twitter.com/' . h($account['screen_name']) . '">@' . h($account['screen_name']) . '</a>) <span class="label remove"><a href="?remove=' . $account['account_id'] . '">Remove</a></span></h2>';
+						echo '<div class="controls controls-row add-access">
+						<select class="span4" name="add_level[' . h($account['account_id']) . ']"><option value="view">View</option><option value="edit">Propose</option><option value="approve">Auto Approve</option></select>
+						<input type="text" class="input-small" name="add_access[' . h($account['account_id']) . ']" value="" placeholder="AccessID" autocomplete="off" maxlength="24"> <button type="submit" class="btn">Add Access</button></div>';
+						echo '<h2>' . h($account['name']) . ' (<a href="http://twitter.com/' . h($account['screen_name']) . '">@' . h($account['screen_name']) . '</a>) <span class="label label-inverse"><i class="icon-ban-circle icon-white"></i> <a href="?remove=' . $account['account_id'] . '">Remove</a></span></h2>';
 						echo '<span class="stats">' . h($account['statuses_count']) . ' Tweets | ' . h($account['friends_count']) . ' Following | ' . h($account['followers_count']) . ' Followers</span>';
 						
 						if (is_array($account['access']) && count($account['access']) > 1){
 							echo '<ul class="access-list">';
 							foreach($account['access'] as $user){
-								if ($user['user_id'] != $_SESSION['user_details']['user_id'])
-									echo '<li>' . $user['first_name'] . ' ' . $user['last_name'] . ' (' . $user['accessid'] . ') - ' . $user['level'] . '</li>';
+								if ($user['user_id'] != $_SESSION['user_details']['user_id']){
+									echo '<li>' . $user['first_name'] . ' ' . $user['last_name'] . ' (' . $user['accessid'] . ') <span class="label remove"><a href="?remove_access=' . $account['account_id'] . '&amp;user_id=' . $user['user_id'] . '"><i class="icon-remove-sign icon-white"></i> ' . $user['level'] . '</a></span></li>';
+									}
 							}
 							echo '</ul>';
 						}
@@ -226,6 +248,25 @@
 					<p>Please add an account on the right side.</p>	
 			<?php }
 			?>
+			
+			<div class="list-header well">
+				<h2>Accounts shared with you</h2>
+			</div>
+			<?php
+				// List the users accounts
+				if (is_array($access_list['response']['accounts']) && count($access_list['response']['accounts']) > 0){
+					echo '<ul class="account-list">';
+					foreach($access_list['response']['accounts'] as $account){
+						echo '<li>';
+						echo '<img src="' . h($account['profile_image_url_https']) . '" width="48" height="48" alt="' . h($account['screen_name']) . '" />';
+						echo '<h2>' . h($account['name']) . ' (<a href="http://twitter.com/' . h($account['screen_name']) . '">@' . h($account['screen_name']) . '</a>)</h2>';
+						echo '<span class="stats">' . h($account['statuses_count']) . ' Tweets | ' . h($account['friends_count']) . ' Following | ' . h($account['followers_count']) . ' Followers <span class="label remove">' . $account['level'] . '</span></span>';
+						echo '</li>';
+					}
+					echo '</ul>';
+				}else{ ?>
+					<p>Currently no accounts shared with you.</p>	
+			<?php } ?>
 		</div>
 	</div>
 	

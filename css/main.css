@@ -85,3 +85,15 @@ footer {
 	font-size: 1.3em;
 	line-height: 1.4em;
 }
+#content .access-list {
+	margin: 8px 0 0 30px;
+	padding: 0;
+	list-style: none;
+}
+#content .access-list li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+/* Add Tweet */
