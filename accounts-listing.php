@@ -10,8 +10,25 @@
 	$page_title = 'Accounts';
 	$page_url = $_SERVER['PHP_SELF'];
 	
+	// If adding access
 	if (isset($_POST['add_access']) && count($_POST['add_access']) > 0){
-		Pre($_POST);
+		// Loop through every account submitted
+		foreach($_POST['add_access'] as $account_id => $accessid){
+			// If there was a user submitted
+			if ($accessid != ''){
+				// Create the params to submit
+				$access_params = array('account_id' => $account_id, 'accessid' => $accessid, 'level' => 'view');
+	
+				// Do the API request to add their access
+				$access_response = $c->sendRequest('socialy/access/add', $access_params, 'post', true);
+		    
+				// If there was an error saving the account to the API
+				if (is_array($access_response['response']['error']))
+		    		Flash($access_response['response']['error']['message'], 'error');
+		    	else
+		    		Flash('User added successfully.', 'success');
+		    }
+		}
 	}
 	
 	// if removing access
