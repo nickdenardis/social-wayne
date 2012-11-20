@@ -42,9 +42,9 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">New <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="<?php echo PATH; ?>message/twitter/new">Tweet</a></li>
-                                    <li><a href="<?php echo PATH; ?>message/facebook/new">FB Update</a></li>
-                                    <li><a href="<?php echo PATH; ?>message/tumblr/new">Tumblr</a></li>
+                                    <li><a href="<?php echo PATH; ?>tweet/new">Tweet</a></li>
+                                    <li><a href="<?php echo PATH; ?>facebook/new">FB Update</a></li>
+                                    <li><a href="<?php echo PATH; ?>tumblr/new">Tumblr</a></li>
                                     <li><a href="<?php echo PATH; ?>url/new">URL</a></li>
                                 </ul>
                             </li>
