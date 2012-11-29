@@ -14,14 +14,17 @@
 	
 	// If submitting a new tweet 
 	if (isset($_POST) && count($_POST) > 0){
+		
 		// Make sure there is an account selected
 		if (is_array($_POST['from_account'])){
 			foreach($_POST['from_account'] as $account){		
+				$date_scheduled = date('Y-m-d H:i:s', strtotime($_POST['tweet-date'] . ' ' . $_POST['tweet-time']));
+				
 				// Create the params array
 				$tweet_params = array('message' => $_POST['new_message'],
 									'account_id' => $account['account_id'],
 									'user_id' => $_SESSION['user_details']['user_id'],
-									'date_scheduled' => date('Y-m-d H:i:s'));
+									'date_scheduled' => $date_scheduled);
 				
 				// Get a list of all the account this user has access to
 				$tweet_status[] = $c->sendRequest('socialy/tweet/schedule', $tweet_params, 'post');
@@ -54,11 +57,11 @@
 			        <button class="btn btn-info" type="submit">Post New Message</button> 
 			        
 			        <div class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
-					  <input class="span2" size="16" type="text" value="<?php echo date('Y-m-d'); ?>">
+					  <input class="span2" size="16" type="text" value="<?php echo date('Y-m-d'); ?>" name="tweet-date">
 					  <span class="add-on"><i class="icon-th"></i></span>
 					</div>
 					<div class="input-append bootstrap-timepicker-component">
-	                    <input class="input-small timepicker" type="text" value="<?php echo date('g:i a'); ?>" /><span class="add-on"><i class="icon-time"></i></span>
+	                    <input class="input-small timepicker" type="text" value="<?php echo date('g:i a'); ?>" name="tweet-time" /><span class="add-on"><i class="icon-time"></i></span>
 	                </div>
 		</div>
 	</div>
