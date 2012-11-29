@@ -9,6 +9,14 @@
         <script>window.jQuery || document.write('<script src="<?php echo PATH; ?>js/vendor/jquery-1.8.1.min.js"><\/script>')</script>
 
         <script src="<?php echo PATH; ?>js/vendor/bootstrap.min.js"></script>
+        
+        <?php
+        if (is_array($page_js) && count($page_js)){
+	        foreach($page_js as $file){
+		        echo '<script src="' . $file . '"></script>';
+	        }
+        }
+        ?>
 
         <script src="<?php echo PATH; ?>js/plugins.js"></script>
         <script src="<?php echo PATH; ?>js/main.js"></script>

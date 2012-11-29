@@ -11,7 +11,8 @@
 	$page_url = $_SERVER['PHP_SELF'];
 	
 	// Get a list of all the account this user has access to
-	$stats_response = $c->sendRequest('go/url/listing', array('utm_campaign' => 'social'), 'get');
+	$stats_params = array('utm_campaign' => 'social');
+	$stats_response = $c->sendRequest('go/url/listing', $stats_params, 'get');
 	
 	include_once(ROOT . '/_header.php');
 ?>	

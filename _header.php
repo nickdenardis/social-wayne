@@ -18,6 +18,16 @@
             }
         </style>
         <link rel="stylesheet" href="<?php echo PATH; ?>css/bootstrap-responsive.min.css">
+        
+        <?php
+        if (is_array($page_css) && count($page_css)){
+	        foreach($page_css as $file){
+		        echo '<link rel="stylesheet" href="' . $file . '">';
+	        }
+        }
+        ?>
+        
+        
         <link rel="stylesheet" href="<?php echo PATH; ?>css/main.css">
 
         <script src="<?php echo PATH; ?>js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>

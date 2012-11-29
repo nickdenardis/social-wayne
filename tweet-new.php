@@ -9,6 +9,8 @@
 	// Page stuff
 	$page_title = 'New Tweet';
 	$page_url = $_SERVER['PHP_SELF'];
+	$page_css = array(PATH . 'css/datepicker.css', PATH . 'css/timepicker.css');
+	$page_js = array(PATH . 'js/vendor/bootstrap-datepicker.js', PATH . 'js/vendor/bootstrap-timepicker.js');
 	
 	// If submitting a new tweet 
 	if (isset($_POST) && count($_POST) > 0){
@@ -49,33 +51,46 @@
 			</div>
 			        <textarea class="span10" id="new_message" name="new_message" placeholder="Type in your message" rows="5"></textarea>
 			        <h6>320 characters remaining</h6>
-			        <button class="btn btn-info" type="submit">Post New Message</button>
+			        <button class="btn btn-info" type="submit">Post New Message</button> 
+			        
+			        <div class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
+					  <input class="span2" size="16" type="text" value="<?php echo date('Y-m-d'); ?>">
+					  <span class="add-on"><i class="icon-th"></i></span>
+					</div>
+					<div class="input-append bootstrap-timepicker-component">
+	                    <input class="input-small timepicker" type="text" value="<?php echo date('g:i a'); ?>" /><span class="add-on"><i class="icon-time"></i></span>
+	                </div>
 		</div>
 	</div>
 	
-	<div class="span3 add-account">
+	<div class="span3 account-selection">
 		<div class="list-view">
 			<div class="list-header well">
 				<h2>Post to Account</h2>
 			</div>
-			<ul>
+			
+			
 				<?php
 				// List the users accounts
 				if (is_array($account_list['response']['accounts'])){
 					foreach($account_list['response']['accounts'] as $account){
 						if ($account['level'] != 'view'){
-							echo '<li>';
-							echo '<img src="' . h($account['profile_image_url_https']) . '" width="48" height="48" alt="' . h($account['screen_name']) . '" /><br />';
-							echo '<input type="checkbox" value="' . h($account['account_id']) . '" name="from_account[]"> ';
-							echo h($account['name']) . '<br /><a href="http://twitter.com/' . h($account['screen_name']) . '">@' . h($account['screen_name']) . '</a>';
-							echo '</li>';
+							echo '<div class="row-fluid">
+							<div class="span1">
+							<input type="checkbox" value="' . h($account['account_id']) . '" name="from_account[]" id="acct-' . h($account['screen_name']) . '">
+							</div>
+				<div class="span3">
+				<label for="acct-' . h($account['screen_name']) . '"><img src="' . h($account['profile_image_url_https']) . '" width="48" height="48" alt="' . h($account['screen_name']) . '" /></label>
+				</div>
+				<div class="span8">
+				' . h($account['name']) . '
+				<br /><a href="http://twitter.com/' . h($account['screen_name']) . '">@' . h($account['screen_name']) . '</a>
+				</div>
+			</div>';
 						}
 					}
-				}else{
+				}
 				?>
-				<li><a href="<?php echo PATH; ?>accounts/listing?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a></li>
-				<?php } ?>
-			</ul>
 		</div>
 	</div>
 	</form>

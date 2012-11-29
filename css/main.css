@@ -97,3 +97,13 @@ footer {
 }
 
 /* Add Tweet */
+.account-selection .row-fluid {
+	padding: 5px 0;
+	line-height: 1.6em;
+}
+.account-selection label {
+	display: inline;
+}
+.account-selection input {
+	margin: 0;
+}
