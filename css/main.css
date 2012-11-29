@@ -107,3 +107,6 @@ footer {
 .account-selection input {
 	margin: 0;
 }
+.datepicker {
+	padding: 0;
+}

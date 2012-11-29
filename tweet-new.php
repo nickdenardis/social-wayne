@@ -52,17 +52,24 @@
 			<div class="list-header well">
 				<h2>Add Tweet</h2>
 			</div>
-			        <textarea class="span10" id="new_message" name="new_message" placeholder="Type in your message" rows="5"></textarea>
-			        <h6>320 characters remaining</h6>
-			        <button class="btn btn-info" type="submit">Post New Message</button> 
+			
+			<textarea class="span10" id="new_message" name="new_message" placeholder="Type in your message" rows="5"></textarea>
+			<h6>320 characters remaining</h6>
 			        
-			        <div class="input-append date datepicker" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
-					  <input class="span2" size="16" type="text" value="<?php echo date('Y-m-d'); ?>" name="tweet-date">
-					  <span class="add-on"><i class="icon-th"></i></span>
+			<div class="row-fluid">
+				<div class="span3">
+					<button class="btn btn-info" type="submit">Post New Message</button>
+				</div>
+					<div class="input-append date datepicker span2" data-date="<?php echo date('Y-m-d'); ?>" data-date-format="yyyy-mm-dd">
+						<input class="span11" size="16" type="text" value="<?php echo date('Y-m-d'); ?>" name="tweet-date">
+						<span class="add-on"><i class="icon-th"></i></span>
 					</div>
+				<div class="span6">
 					<div class="input-append bootstrap-timepicker-component">
-	                    <input class="input-small timepicker" type="text" value="<?php echo date('g:i a'); ?>" name="tweet-time" /><span class="add-on"><i class="icon-time"></i></span>
-	                </div>
+		            	<input class="input-small timepicker" type="text" value="<?php echo date('g:i a'); ?>" name="tweet-time" /><span class="add-on"><i class="icon-time"></i></span>
+		            </div>
+				</div>
+			</div>
 		</div>
 	</div>
 	
