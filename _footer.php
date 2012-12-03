@@ -11,7 +11,7 @@
         <script src="<?php echo PATH; ?>js/vendor/bootstrap.min.js"></script>
         
         <?php
-        if (is_array($page_js) && count($page_js)){
+        if (isset($page_js) && is_array($page_js)){
 	        foreach($page_js as $file){
 		        echo '<script src="' . $file . '"></script>';
 	        }

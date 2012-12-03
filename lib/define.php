@@ -10,7 +10,8 @@ if (is_file(ROOT . '/lib/define-local.php'))
 	include_once(ROOT . '/lib/define-local.php');
 
 // Defines
-d('PATH', '/' . array_pop(explode('/', ROOT)) . '/');
+$root_array = explode('/', ROOT);
+d('PATH', '/' . array_pop($root_array) . '/');
 
 // Find the default mode
 if (!isset($_SESSION['api_mode']))

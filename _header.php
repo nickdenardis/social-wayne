@@ -20,7 +20,7 @@
         <link rel="stylesheet" href="<?php echo PATH; ?>css/bootstrap-responsive.min.css">
         
         <?php
-        if (is_array($page_css) && count($page_css)){
+        if (isset($page_css) && is_array($page_css)){
 	        foreach($page_css as $file){
 		        echo '<link rel="stylesheet" href="' . $file . '">';
 	        }
