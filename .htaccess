@@ -542,4 +542,4 @@ php_flag display_errors On
 # --------- Social Dashboard ----------- #
 
 RewriteOptions Inherit
-RewriteRule ^([a-zA-Z-]+)/([a-zA-Z-]+)/?$ /socialy/$1-$2.php
+RewriteRule ^([a-zA-Z-]+)/([a-zA-Z-]+)/?$ /$1-$2.php

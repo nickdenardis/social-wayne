@@ -200,6 +200,8 @@
 	// Get a list of all the account this user has access to
 	$account_list = $c->sendRequest('socialy/account/listing', array(), 'get');
 	
+	Pre($account_list);
+	
 	
 	$access_list = $c->sendRequest('socialy/account/access', array('notowner' => 'true'), 'get');
 	
@@ -218,7 +220,7 @@
 			
 			<?php
 				// List the users accounts
-				if (is_array($account_list['response']['accounts'])){
+				if (!array_key_exists('error', $account_list['response']) && is_array($account_list['response']['accounts'])){
 					echo '<form id="account-access" class="form-account-access form-inline" method="post" action="">';
 					echo '<ul class="account-list">';
 					foreach($account_list['response']['accounts'] as $account){
@@ -254,7 +256,7 @@
 			</div>
 			<?php
 				// List the users accounts
-				if (is_array($access_list['response']['accounts']) && count($access_list['response']['accounts']) > 0){
+				if (!array_key_exists('error', $access_list['response']) && is_array($access_list['response']['accounts']) && count($access_list['response']['accounts']) > 0){
 					echo '<ul class="account-list">';
 					foreach($access_list['response']['accounts'] as $account){
 						echo '<li>';

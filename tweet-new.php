@@ -85,7 +85,7 @@
 			
 				<?php
 				// List the users accounts
-				if (is_array($account_list['response']['accounts'])){
+				if (!array_key_exists('error', $account_list['response']) && is_array($account_list['response']['accounts'])){
 					foreach($account_list['response']['accounts'] as $account){
 						if ($account['level'] != 'view'){
 							echo '<div class="row-fluid">
