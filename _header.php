@@ -10,14 +10,14 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="<?php echo PATH; ?>css/bootstrap.min.css">
+        <link rel="stylesheet" href="<?php echo PATH; ?>vendor/bootstrap/css/bootstrap.min.css">
         <style>
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
         </style>
-        <link rel="stylesheet" href="<?php echo PATH; ?>css/bootstrap-responsive.min.css">
+        <link rel="stylesheet" href="<?php echo PATH; ?>vendor/bootstrap/css/bootstrap-responsive.min.css">
         
         <?php
         if (isset($page_css) && is_array($page_css)){
@@ -30,7 +30,7 @@
         
         <link rel="stylesheet" href="<?php echo PATH; ?>css/main.css">
 
-        <script src="<?php echo PATH; ?>js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+        <script src="<?php echo PATH; ?>vendor/modernizr/modernizr.custom.46190.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>

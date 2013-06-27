@@ -1,14 +1,14 @@
 <hr>
             <footer>
-                <p>&copy; Wayne State University 2012 <?php echo (MODE == 'production')?'<span class="label label-success"><a href="' . PATH . '?api=flop">Production API</a></span>':'<span class="label label-important"><a href="' . PATH . '?api=flop">Dev API</a></span>'; ?> </p>
+                <p>&copy; Wayne State University <?php echo date('Y') . ' '; echo (MODE == 'production')?'<span class="label label-success"><a href="' . PATH . '?api=flop">Production API</a></span>':'<span class="label label-important"><a href="' . PATH . '?api=flop">Dev API</a></span>'; ?> </p>
             </footer>
 
         </div> <!-- /container -->
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="<?php echo PATH; ?>js/vendor/jquery-1.8.1.min.js"><\/script>')</script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="<?php echo PATH; ?>vendor/jquery/jquery-2.0.2.min.js"><\/script>')</script>
 
-        <script src="<?php echo PATH; ?>js/vendor/bootstrap.min.js"></script>
+        <script src="<?php echo PATH; ?>vendor/bootstrap/js/bootstrap.min.js"></script>
         
         <?php
         if (isset($page_js) && is_array($page_js)){
