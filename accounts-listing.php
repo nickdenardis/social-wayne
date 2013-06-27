@@ -1,10 +1,14 @@
 <?php
 	define('ROOT', dirname(__FILE__));
 	include_once(ROOT . '/lib/define.php');
+	//phpinfo();
+	//die();
 	
 	// oAuth stuff
-	include_once(ROOT . '/lib/themattharris/tmhOAuth.php');
-	include_once(ROOT . '/lib/themattharris/tmhUtilities.php');
+	include_once(ROOT . '/vendor/tmhoauth/tmhOAuth.php');
+	include_once(ROOT . '/lib/twitteroauth.php');
+	
+	$tmhOAuth = new tmhOAuthTwitter;
 	
 	// Page stuff
 	$page_title = 'Accounts';
@@ -41,7 +45,7 @@
 		else
 			Flash('The account has been removed.');
 			
-		header('Location: ' . tmhUtilities::php_self());
+		header('Location: ' . php_self());
 		die();
 	}
 	
@@ -55,93 +59,113 @@
 		else
 			Flash('The access has been removed.');
 			
-		header('Location: ' . tmhUtilities::php_self());
+		header('Location: ' . php_self());
 		die();
 	}
 	
-	$tmhOAuth = new tmhOAuth(array(
-	  'consumer_key'    => 'AHbD6KOwFcUp57JJ8ofTw',
-	  'consumer_secret' => 'lxwPpSvedHIEQpevtPChGPuZk4awsVWECx5wUwE3R4',
-	));
-	
-	function outputError($tmhOAuth) {
-	  Flash('There was an error: ' . $tmhOAuth->response['response']);
+	// Twitter OAuth flow
+	function uri_params() {
+	  $url = parse_url($_SERVER['REQUEST_URI']);
+	  $params = array();
+	  if (array_key_exists('query', $url)){
+		  foreach (explode('&', $url['query']) as $p) {
+		  	if ($p != ''){
+		      list($k, $v) = explode('=', $p);
+		      $params[$k] =$v;
+			}
+		  }
+	  }
+	  return $params;
 	}
 	
-	function wipe() {
-	  session_destroy();
-	  header('Location: ' . tmhUtilities::php_self());
-	}
-	
-	
-	// Step 1: Request a temporary token
 	function request_token($tmhOAuth) {
-	  $code = $tmhOAuth->request(
-	    'POST',
-	    $tmhOAuth->url('oauth/request_token', ''),
-	    array(
-	      'oauth_callback' => tmhUtilities::php_self()
-	    )
-	  );
+	  $code = $tmhOAuth->apponly_request(array(
+	    'without_bearer' => true,
+	    'method' => 'POST',
+	    'url' => $tmhOAuth->url('oauth/request_token', ''),
+	    'params' => array(
+	      'oauth_callback' => php_self(false),
+	    ),
+	  ));
 	
-	  if ($code == 200) {
-	    $_SESSION['oauth'] = $tmhOAuth->extract_params($tmhOAuth->response['response']);
-	    authorize($tmhOAuth);
+	  if ($code != 200) {
+	    Flash("There was an error communicating with Twitter. {$tmhOAuth->response['response']}");
+	    return;
+	  }
+	
+	  // store the params into the session so they are there when we come back after the redirect
+	  $_SESSION['oauth'] = $tmhOAuth->extract_params($tmhOAuth->response['response']);
+	
+	  // check the callback has been confirmed
+	  if ($_SESSION['oauth']['oauth_callback_confirmed'] !== 'true') {
+	    Flash('The callback was not confirmed by Twitter so we cannot continue.');
 	  } else {
-	    outputError($tmhOAuth);
+	    $url = $tmhOAuth->url('oauth/authorize', '') . "?oauth_token={$_SESSION['oauth']['oauth_token']}";
+	    //echo '<p><a href="' . $url . '">' . $url . '</a></p>';
+	    return $url;
 	  }
 	}
 	
-	
-	// Step 2: Direct the user to the authorize web page
-	function authorize($tmhOAuth) {
-	  $authurl = $tmhOAuth->url("oauth/authorize", '') .  "?oauth_token={$_SESSION['oauth']['oauth_token']}";
-	  header("Location: {$authurl}");
-	
-	  // in case the redirect doesn't fire
-	  echo '<p>To complete the OAuth flow please visit URL: <a href="'. $authurl . '">' . $authurl . '</a></p>';
-	}
-	
-	
-	// Step 3: This is the code that runs when Twitter redirects the user to the callback. Exchange the temporary token for a permanent access token
 	function access_token($tmhOAuth) {
-	  global $c;
-	  
-	  $tmhOAuth->config['user_token']  = $_SESSION['oauth']['oauth_token'];
-	  $tmhOAuth->config['user_secret'] = $_SESSION['oauth']['oauth_token_secret'];
-	
-	  $code = $tmhOAuth->request(
-	    'POST',
-	    $tmhOAuth->url('oauth/access_token', ''),
-	    array(
-	      'oauth_verifier' => $_REQUEST['oauth_verifier']
-	    )
-	  );
-	
-	  if ($code == 200) {
-	    $_SESSION['access_token'] = $tmhOAuth->extract_params($tmhOAuth->response['response']);
+		global $c;
+	  $params = uri_params();
+	  if ($params['oauth_token'] !== $_SESSION['oauth']['oauth_token']) {
+	    Flash('The oauth token you started with doesn\'t match the one you\'ve been redirected with. do you have multiple tabs open?');
 	    unset($_SESSION['oauth']);
 	    
-	    // Save the credentials in the DB
-	    $socialy_params = $_SESSION['access_token'];
+	    //session_unset();
+	    return;
+	  }
+	
+	  if (!isset($params['oauth_verifier'])) {
+	    Flash('The oauth verifier is missing so we cannot continue. did you deny the appliction access?');
+	    unset($_SESSION['oauth']);
+	    
+	    //session_unset();
+	    return;
+	  }
+	
+	  // update with the temporary token and secret
+	  $tmhOAuth->reconfigure(array_merge($tmhOAuth->config, array(
+	    'token'  => $_SESSION['oauth']['oauth_token'],
+	    'secret' => $_SESSION['oauth']['oauth_token_secret'],
+	  )));
+	
+	  $code = $tmhOAuth->user_request(array(
+	    'method' => 'POST',
+	    'url' => $tmhOAuth->url('oauth/access_token', ''),
+	    'params' => array(
+	      'oauth_verifier' => trim($params['oauth_verifier']),
+	    )
+	  ));
+	
+	  if ($code == 200) {
+	    $oauth_creds = $tmhOAuth->extract_params($tmhOAuth->response['response']);
+	    
+	     // Save the credentials in the DB
+	    $socialy_params = $oauth_creds;
 	    $socialy_params['owner_id'] = $_SESSION['user_details']['user_id'];
 	    $socialy_params['type'] = 'twitter';
 	    $socialy_params['is_active'] = '1';
 	    $social_response = $c->sendRequest('socialy/account/add', $socialy_params, 'post', true);
 	    
 	    // If there was an error saving the account to the API
-	    if (is_array($social_response['response']['error']))
+	    if (array_key_exists('error', $social_response['response']) && is_array($social_response['response']['error']))
 	    	Flash($social_response['response']['error']['message'], 'error');
 	    	
 	    // Try to get the info for the account
-	    $tmhOAuth->config['user_token']  = $social_response['response']['account']['oauth_token'];
-	    $tmhOAuth->config['user_secret'] = $social_response['response']['account']['oauth_token_secret'];
-	    $code = $tmhOAuth->request('GET',$tmhOAuth->url('1/account/verify_credentials'));
+	    $tmhOAuth->config['user_token']  = $oauth_creds['oauth_token'];
+	    $tmhOAuth->config['user_secret'] = $oauth_creds['oauth_token_secret'];
+	    $code = $tmhOAuth->request('GET',$tmhOAuth->url('1.1/account/verify_credentials'));
+	    
+	    Pre($code);
 	
 	    // If this user is valid
 	    if ($code == 200) {
 	    	// Get the response
 		    $resp = json_decode($tmhOAuth->response['response'], true);
+		    
+		    Pre($resp);
 		    
 		    // Update it in the twitter account table
 		    $account_params = $resp;
@@ -151,6 +175,8 @@
 		    
 		    $account_response = $c->sendRequest('socialy/twitterinfo/add', $account_params, 'post', true);
 		    
+		    Pre($account_response);
+		    
 		    // If there was an error saving the account to the API
 		    if (is_array($account_response['response']['error']))
 	    		Flash($account_response['response']['error']['message'], 'error');
@@ -158,51 +184,25 @@
 		    	Flash('Account "' . $account_response['response']['twitter']['screen_name'] . '" added successfully!');
 	    }
 	    
-	    header('Location: ' . tmhUtilities::php_self());
-	    die();
-	  } else {
-	    outputError($tmhOAuth);
+	    //header('Location: ' . php_self());
+	    //die();
 	  }
 	}
 	
-	
-	// Step 4: Now the user has authenticated, do something with the permanent token and secret we received
-	function verify_credentials($tmhOAuth) {
-	  $tmhOAuth->config['user_token']  = $_SESSION['access_token']['oauth_token'];
-	  $tmhOAuth->config['user_secret'] = $_SESSION['access_token']['oauth_token_secret'];
-	
-	  $code = $tmhOAuth->request(
-	    'GET',
-	    $tmhOAuth->url('1/account/verify_credentials')
-	  );
-	
-	  if ($code == 200) {
-	    $resp = json_decode($tmhOAuth->response['response']);
-	    print_r($resp);
-	    print_r($_SESSION);
-	    echo '<h1>Hello ' . $resp->screen_name . '</h1>';
-	    echo '<p>The access level of this token is: ' . $tmhOAuth->response['headers']['x_access_level'] . '</p>';
-	  } else {
-	    outputError($tmhOAuth);
-	  }
-	}
-	
-	if (isset($_REQUEST['start'])) :
-	  request_token($tmhOAuth);
-	elseif (isset($_REQUEST['oauth_verifier'])) :
+	$params = uri_params();
+	if (!isset($params['oauth_token'])) {
+	  // Step 1: Request a temporary token and
+	  // Step 2: Direct the user to the authorize web page
+	  $twitter_request_url = request_token($tmhOAuth);
+	} else {
+	  // Step 3: This is the code that runs when Twitter redirects the user to the callback. Exchange the temporary token for a permanent access token
 	  access_token($tmhOAuth);
-	elseif (isset($_REQUEST['verify'])) :
-	  verify_credentials($tmhOAuth);
-	elseif (isset($_REQUEST['wipe'])) :
-	  wipe();
-	endif;
+	}
 	
 	// Get a list of all the account this user has access to
 	$account_list = $c->sendRequest('socialy/account/listing', array(), 'get');
 	
-	Pre($account_list);
-	
-	
+
 	$access_list = $c->sendRequest('socialy/account/access', array('notowner' => 'true'), 'get');
 	
 	//Pre($access_list);
@@ -278,7 +278,7 @@
 				<h2>Add an Account</h2>
 			</div>
 			<ul>
-				<li><a href="?start=1"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a></li>
+				<li><a href="<?php echo $twitter_request_url; ?>"><img src="<?php echo PATH; ?>img/twitter_signin.png" alt="twitter_signin" width="150" height="22" /></a></li>
 			</ul>
 		</div>
 	</div>

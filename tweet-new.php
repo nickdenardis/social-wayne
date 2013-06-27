@@ -9,32 +9,38 @@
 	// Page stuff
 	$page_title = 'New Tweet';
 	$page_url = $_SERVER['PHP_SELF'];
-	$page_css = array(PATH . 'css/datepicker.css', PATH . 'css/timepicker.css');
-	$page_js = array(PATH . 'js/vendor/bootstrap-datepicker.js', PATH . 'js/vendor/bootstrap-timepicker.js');
+	$page_css = array(PATH . 'vendor/datepicker/css/datepicker.css', PATH . 'vendor/timepicker/css/timepicker.css');
+	$page_js = array(PATH . 'vendor/datepicker/js/bootstrap-datepicker.js', PATH . 'vendor/timepicker/js/bootstrap-timepicker.js');
 	
 	// If submitting a new tweet 
 	if (isset($_POST) && count($_POST) > 0){
-		
+
 		// Make sure there is an account selected
-		if (is_array($_POST['from_account'])){
-			foreach($_POST['from_account'] as $account){		
+		if (array_key_exists('from_account', $_POST) && is_array($_POST['from_account'])){
+			foreach($_POST['from_account'] as $account){
+				Pre($account);		
 				$date_scheduled = date('Y-m-d H:i:s', strtotime($_POST['tweet-date'] . ' ' . $_POST['tweet-time']));
 				
 				// Create the params array
 				$tweet_params = array('message' => $_POST['new_message'],
-									'account_id' => $account['account_id'],
+									'account_id' => $account,
 									'user_id' => $_SESSION['user_details']['user_id'],
 									'date_scheduled' => $date_scheduled);
+				Pre($tweet_params);
 				
 				// Get a list of all the account this user has access to
 				$tweet_status[] = $c->sendRequest('socialy/tweet/schedule', $tweet_params, 'post');
 			}
 			
-			$success_num = 0;
+			Pre($tweet_status);
+			
 			foreach($tweet_status as $tweeted){
-				$success_num++;
-			}
-			Flash('Successfully tweeted from ' . $success_num . ' account(s)');			
+				if (array_key_exists('error', $tweeted['response'])){
+					Flash('Error posting to [account name].', 'error');
+				}else{
+					Flash('Successfully tweeted from [account name] account.');		
+				}
+			}	
 		}else{
 			Flash('Please select an account.', 'error');
 		}
