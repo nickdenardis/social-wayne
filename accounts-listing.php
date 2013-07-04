@@ -40,7 +40,7 @@
 		$remove_params = array('account_id' => (int)$_GET['remove']);
 		$account_removed = $c->sendRequest('socialy/account/remove', $remove_params, 'post');
 		
-		if (is_array($account_removed['response']['error']))
+		if (array_key_exists('error', $account_removed['response']) && is_array($account_removed['response']['error']))
 	    	Flash($account_removed['response']['error']['message'], 'error');
 		else
 			Flash('The account has been removed.');
